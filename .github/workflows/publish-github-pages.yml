@@ -18,16 +18,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
+          cache: yarn
 
-      - name: Setup pnpm
-        run: npm install -g pnpm
+      - name: Install Yarn
+        run: npm install -g yarn
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: yarn install --frozen-lockfile
 
       - name: Build example app
-        run: pnpm build  # Vite builds to example/dist
+        run: yarn build  # Vite builds to example/dist
 
       - uses: actions/upload-pages-artifact@v3
         with:
