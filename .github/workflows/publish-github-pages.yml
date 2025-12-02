@@ -18,15 +18,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
+          cache: npm
 
-      - name: Setup pnpm and install deps
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-          run_install: true
+      - name: Install dependencies with npm
+        run: npm install
 
-      - run: pnpm build  # Vite builds to example/dist
+      - name: Build example app
+        run: npm run build  # Vite builds to example/dist
 
       - uses: actions/upload-pages-artifact@v3
         with:
