@@ -3,6 +3,7 @@
     "outDir": "out",
     "target": "es2021",
     "lib": ["ES2021", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "isolatedModules": true,
@@ -14,6 +15,6 @@
     "noEmit": false,
     "baseUrl": "./src"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "example/src/**/*"],
   "exclude": ["node_modules", "out"]
 }
