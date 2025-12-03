@@ -1,30 +1,41 @@
 import React, { useEffect, useState } from 'react';
+import { ApproveEventsEnum } from '../common/approveModal.types';
 
 export const IframeModal = () => {
-  const [subtitle, setSubtitle] = useState('Sample text');
+  const [subtitle, setSubtitle] = useState<string | null>(null);
 
   const onApprove = () => {
-    console.log('Approve');
+    window.parent.postMessage(
+      { type: ApproveEventsEnum.LOGIN_RESPONSE, payload: true },
+      '*'
+    );
   };
 
   const onReject = () => {
-    console.log('Reject');
+    window.parent.postMessage(
+      { type: ApproveEventsEnum.LOGIN_RESPONSE, payload: false },
+      '*'
+    );
   };
 
   useEffect(() => {
     window.parent.postMessage({ type: 'IFRAME_READY' }, '*');
 
-    const handler = (event: MessageEvent) => {
+    const loginHandler = (event: MessageEvent) => {
       const data = event.data;
       if (!data) return;
 
-      if (data.type === 'IFRAME_SUBTITLE') {
-        setSubtitle(data.text);
+      switch (data.type) {
+        case ApproveEventsEnum.LOGIN_REQUEST:
+          if (typeof data.payload === 'string') {
+            setSubtitle(data.payload);
+          }
+          break;
       }
     };
 
-    window.addEventListener('message', handler);
-    return () => window.removeEventListener('message', handler);
+    window.addEventListener('message', loginHandler);
+    return () => window.removeEventListener('message', loginHandler);
   }, []);
 
   return (

@@ -22,10 +22,10 @@ const createApproveTemplate = (data: string) => {
 export class WebcomponentModal extends HTMLElement {
   private readonly eventBus: IEventBus = new EventBus();
   private data: string | null = null;
-  private unsubscribeData: (() => void) | null = null;
+  private unsubscribeFromLogin: (() => void) | null = null;
 
   connectedCallback() {
-    this.unsubscribeData = this.eventBus.subscribe(
+    this.unsubscribeFromLogin = this.eventBus.subscribe(
       ApproveEventsEnum.LOGIN_REQUEST,
       (data) => {
         this.data = typeof data === 'string' ? data : null;
@@ -37,10 +37,8 @@ export class WebcomponentModal extends HTMLElement {
   }
 
   disconnectedCallback() {
-    if (this.unsubscribeData) {
-      this.unsubscribeData();
-      this.unsubscribeData = null;
-    }
+    this.unsubscribeFromLogin?.();
+    this.unsubscribeFromLogin = null;
   }
 
   async getEventBus(): Promise<IEventBus> {

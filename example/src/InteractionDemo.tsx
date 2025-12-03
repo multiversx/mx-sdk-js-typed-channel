@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { openEventBusApproveModal } from './event-bus/openWebcomponentModal';
 import { openBroadcastChannelApproveModal } from './broadcast-channel/BroadcastChannelDemo';
 import { IframePortal } from './iframe-postmessage/IframePortal';
+import { ApproveEventsEnum } from './common/approveModal.types';
 
 export function InteractionDemo() {
   const [lastResponse, setLastResponse] = useState<string | null>(null);
@@ -41,7 +42,7 @@ export function InteractionDemo() {
     const handleReady = (event: MessageEvent) => {
       if (event.data && event.data.type === 'IFRAME_READY') {
         window.postMessage(
-          { type: 'IFRAME_SUBTITLE', text: 'Iframe Modal' },
+          { type: ApproveEventsEnum.LOGIN_REQUEST, payload: 'Sample text' },
           '*'
         );
       }
