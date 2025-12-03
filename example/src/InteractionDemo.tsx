@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { openEventBusApproveModal } from './event-bus/EventBusApp';
 import { openBroadcastChannelApproveModal } from './broadcast-channel/BroadcastChannelDemo';
-import { IFRAME_HTML } from './iframe-postmessage/iframeHtml';
+import { IFRAME_HTML } from './iframe-postmessage/IframeApp';
 
 export function InteractionDemo() {
   const [lastResponse, setLastResponse] = useState<string | null>(null);
