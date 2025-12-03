@@ -1,4 +1,4 @@
-import type { EndpointDef, RequestTypeMapOf } from '../../../../src/protocol';
+import type { EndpointDef, RequestTypeMapOf } from '../../../src/protocol';
 
 // ---- Type-level protocol using EndpointDef ----
 

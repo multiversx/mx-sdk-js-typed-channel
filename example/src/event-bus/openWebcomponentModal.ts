@@ -6,7 +6,7 @@ import {
   ApproveProtocol,
   ApproveEventsEnum,
   requestResponseMap
-} from './ApproveModal/approveModal.types';
+} from '../common/approveModal.types';
 
 let eventBusPromise: Promise<IEventBus> | null = null;
 

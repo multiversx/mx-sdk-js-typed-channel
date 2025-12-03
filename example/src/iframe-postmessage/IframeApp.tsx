@@ -12,7 +12,6 @@ export const IframeApp = () => {
   };
 
   useEffect(() => {
-    // Let the parent know the iframe React app is ready to receive messages.
     window.parent.postMessage({ type: 'IFRAME_READY' }, '*');
 
     const handler = (event: MessageEvent) => {

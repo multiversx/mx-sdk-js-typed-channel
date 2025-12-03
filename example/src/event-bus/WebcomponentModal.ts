@@ -1,5 +1,5 @@
-import { EventBus, type IEventBus } from '../EventBus';
-import { ApproveEventsEnum } from './approveModal.types';
+import { EventBus, type IEventBus } from './EventBus';
+import { ApproveEventsEnum } from '../common/approveModal.types';
 
 const createApproveTemplate = (data: string) => {
   return `
@@ -8,10 +8,10 @@ const createApproveTemplate = (data: string) => {
           <h2 class="modal-title">Approve Modal</h2>
           <p class="modal-subtitle">${data}</p>
           <div class="modal-actions">
-            <button class="modal-button modal-button-approve" type="button" id="approve-modal-approve">
+            <button class="modal-button modal-button-approve" type="button" id="webcomponent-modal-approve">
               Approve
             </button>
-            <button class="modal-button modal-button-reject" type="button" id="approve-modal-reject">
+            <button class="modal-button modal-button-reject" type="button" id="webcomponent-modal-reject">
               Reject
             </button>
           </div>
@@ -19,7 +19,7 @@ const createApproveTemplate = (data: string) => {
       </div>
     `;
 };
-export class ApproveModal extends HTMLElement {
+export class WebcomponentModal extends HTMLElement {
   private readonly eventBus: IEventBus = new EventBus();
   private data: string | null = null;
   private unsubscribeData: (() => void) | null = null;
@@ -59,10 +59,10 @@ export class ApproveModal extends HTMLElement {
 
   private bindButtons() {
     const approveButton = this.querySelector<HTMLButtonElement>(
-      '#approve-modal-approve'
+      '#webcomponent-modal-approve'
     );
     const rejectButton = this.querySelector<HTMLButtonElement>(
-      '#approve-modal-reject'
+      '#webcomponent-modal-reject'
     );
 
     if (approveButton) {
@@ -83,6 +83,6 @@ export class ApproveModal extends HTMLElement {
   }
 }
 
-if (!customElements.get('approve-modal-web')) {
-  customElements.define('approve-modal-web', ApproveModal);
+if (!customElements.get('webcomponent-modal')) {
+  customElements.define('webcomponent-modal', WebcomponentModal);
 }
