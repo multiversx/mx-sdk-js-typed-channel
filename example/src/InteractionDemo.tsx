@@ -36,9 +36,16 @@ export function InteractionDemo() {
   };
 
   useEffect(() => {
-    if (!showIframe) {
-      return;
-    }
+    if (!showIframe) return;
+
+    const handleReady = (event: MessageEvent) => {
+      if (event.data && event.data.type === 'IFRAME_READY') {
+        window.postMessage(
+          { type: 'IFRAME_SUBTITLE', text: 'Iframe Modal' },
+          '*'
+        );
+      }
+    };
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -46,8 +53,12 @@ export function InteractionDemo() {
       }
     };
 
+    window.addEventListener('message', handleReady);
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('message', handleReady);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [showIframe]);
 
   return (
