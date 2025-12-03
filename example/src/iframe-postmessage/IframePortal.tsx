@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { IframeApp } from './IframeApp';
+import { IframeModal } from './IframeModal';
 
 interface IframePortalProps {
   iframeRef: React.RefObject<HTMLIFrameElement>;
@@ -38,5 +38,5 @@ export function IframePortal({ iframeRef }: IframePortalProps) {
 
   if (!container) return null;
 
-  return ReactDOM.createPortal(<IframeApp />, container);
+  return ReactDOM.createPortal(<IframeModal />, container);
 }

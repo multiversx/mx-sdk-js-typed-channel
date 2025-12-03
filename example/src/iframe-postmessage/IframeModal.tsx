@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-export const IframeApp = () => {
+export const IframeModal = () => {
   const [subtitle, setSubtitle] = useState('Sample text');
 
   const onApprove = () => {
