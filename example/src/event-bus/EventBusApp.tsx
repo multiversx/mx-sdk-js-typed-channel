@@ -41,21 +41,3 @@ export async function openEventBusApproveModal() {
   unmountApprovalModal();
   return response.payload;
 }
-
-export function EventBusApp() {
-  return (
-    <div className='card'>
-      <h1>Approve Modal Demo</h1>
-      <p className='read-the-docs'>
-        Click the button below to open the approve modal.
-      </p>
-      <button
-        className='modal-button'
-        type='button'
-        onClick={openEventBusApproveModal}
-      >
-        Open Approve Modal
-      </button>
-    </div>
-  );
-}
