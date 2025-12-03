@@ -1,6 +1,12 @@
 import React from 'react';
 
 export const IframeApp = () => {
+  const onApprove = () => {
+    console.log('Approve');
+  };
+  const onReject = () => {
+    console.log('Reject');
+  };
   return (
     <div className='modal-overlay' role='dialog' aria-modal='true'>
       <div className='modal'>
@@ -11,6 +17,7 @@ export const IframeApp = () => {
             className='modal-button modal-button-approve'
             type='button'
             id='approve-modal-approve'
+            onClick={onApprove}
           >
             Approve
           </button>
@@ -18,6 +25,7 @@ export const IframeApp = () => {
             className='modal-button modal-button-reject'
             type='button'
             id='approve-modal-reject'
+            onClick={onReject}
           >
             Reject
           </button>
