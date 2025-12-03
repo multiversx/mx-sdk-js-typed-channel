@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { openEventBusApproveModal } from './event-bus/openEventBusApproveModal';
 import { openBroadcastChannelApproveModal } from './broadcast-channel/BroadcastChannelDemo';
-import { IFRAME_HTML } from './iframe-postmessage/IframeApp';
+import { IframePortal } from './iframe-postmessage/IframePortal';
 
 export function InteractionDemo() {
   const [lastResponse, setLastResponse] = useState<string | null>(null);
   const [showIframe, setShowIframe] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   const handleOpenEventBusModal = async () => {
     const result = await openEventBusApproveModal();
@@ -100,8 +101,9 @@ export function InteractionDemo() {
               <iframe
                 title='Approve Modal Iframe'
                 className='iframe-frame'
-                srcDoc={IFRAME_HTML}
+                ref={iframeRef}
               />
+              <IframePortal iframeRef={iframeRef} />
             </div>
           </div>
         </div>
