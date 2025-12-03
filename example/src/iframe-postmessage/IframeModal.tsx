@@ -6,24 +6,35 @@ export const IframeModal = () => {
 
   const onApprove = () => {
     window.parent.postMessage(
-      { type: ApproveEventsEnum.LOGIN_RESPONSE, payload: true },
+      {
+        channel: 'iframe-approve',
+        type: ApproveEventsEnum.LOGIN_RESPONSE,
+        payload: true
+      },
       '*'
     );
   };
 
   const onReject = () => {
     window.parent.postMessage(
-      { type: ApproveEventsEnum.LOGIN_RESPONSE, payload: false },
+      {
+        channel: 'iframe-approve',
+        type: ApproveEventsEnum.LOGIN_RESPONSE,
+        payload: false
+      },
       '*'
     );
   };
 
   useEffect(() => {
-    window.parent.postMessage({ type: 'IFRAME_READY' }, '*');
+    window.parent.postMessage(
+      { channel: 'iframe-approve', type: 'IFRAME_READY' },
+      '*'
+    );
 
     const loginHandler = (event: MessageEvent) => {
       const data = event.data;
-      if (!data) return;
+      if (!data || data.channel !== 'iframe-approve') return;
 
       switch (data.type) {
         case ApproveEventsEnum.LOGIN_REQUEST:
