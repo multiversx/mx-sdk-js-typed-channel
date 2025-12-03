@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { openEventBusApproveModal } from './event-bus/EventBusApp';
+import { openEventBusApproveModal } from './event-bus/openEventBusApproveModal';
 import { openBroadcastChannelApproveModal } from './broadcast-channel/BroadcastChannelDemo';
 import { IFRAME_HTML } from './iframe-postmessage/IframeApp';
 
