@@ -5,23 +5,21 @@ export const IframeModal = () => {
   const [subtitle, setSubtitle] = useState<string | null>(null);
 
   const onApprove = () => {
-    window.parent.postMessage(
-      {
-        type: ApproveEventsEnum.LOGIN_RESPONSE,
-        payload: true
-      },
-      '*'
-    );
+    const message = {
+      type: ApproveEventsEnum.LOGIN_RESPONSE,
+      payload: true
+    };
+    console.log('IframeModal: Sending approve message', message);
+    window.parent.postMessage(message, '*');
   };
 
   const onReject = () => {
-    window.parent.postMessage(
-      {
-        type: ApproveEventsEnum.LOGIN_RESPONSE,
-        payload: false
-      },
-      '*'
-    );
+    const message = {
+      type: ApproveEventsEnum.LOGIN_RESPONSE,
+      payload: false
+    };
+    console.log('IframeModal: Sending reject message', message);
+    window.parent.postMessage(message, '*');
   };
 
   useEffect(() => {
