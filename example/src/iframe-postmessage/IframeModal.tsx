@@ -7,7 +7,6 @@ export const IframeModal = () => {
   const onApprove = () => {
     window.parent.postMessage(
       {
-        channel: 'iframe-approve',
         type: ApproveEventsEnum.LOGIN_RESPONSE,
         payload: true
       },
@@ -18,7 +17,6 @@ export const IframeModal = () => {
   const onReject = () => {
     window.parent.postMessage(
       {
-        channel: 'iframe-approve',
         type: ApproveEventsEnum.LOGIN_RESPONSE,
         payload: false
       },
@@ -27,14 +25,11 @@ export const IframeModal = () => {
   };
 
   useEffect(() => {
-    window.parent.postMessage(
-      { channel: 'iframe-approve', type: 'IFRAME_READY' },
-      '*'
-    );
+    window.parent.postMessage({ type: 'IFRAME_READY' }, '*');
 
     const loginHandler = (event: MessageEvent) => {
       const data = event.data;
-      if (!data || data.channel !== 'iframe-approve') return;
+      if (!data) return;
 
       switch (data.type) {
         case ApproveEventsEnum.LOGIN_REQUEST:

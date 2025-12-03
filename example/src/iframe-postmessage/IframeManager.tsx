@@ -1,9 +1,10 @@
-import ReactDOM from 'react-dom';
+import { createRoot, Root } from 'react-dom/client';
 import { IframeModal } from './IframeModal';
 import { ApproveEventsEnum } from '../common/approveModal.types';
 
 export class IframeManager {
   private static _instance: IframeManager | null = null;
+  private root: Root | null = null;
 
   static getInstance(): IframeManager {
     if (!IframeManager._instance) {
@@ -35,11 +36,12 @@ export class IframeManager {
       doc.close();
     }
 
-    const root = doc.getElementById('iframe-root');
+    const rootElement = doc.getElementById('iframe-root');
 
-    if (!root) return null;
+    if (!rootElement) return null;
 
-    ReactDOM.createPortal(<IframeModal />, root);
+    this.root = createRoot(rootElement);
+    this.root.render(<IframeModal />);
     const targetWindow = iframe.contentWindow;
 
     function publish<T>(type: string, payload: T) {
@@ -65,9 +67,16 @@ export class IframeManager {
   }
 
   unmount(): void {
-    const iframe = document.getElementById('iframe-root') as HTMLIFrameElement;
+    if (this.root) {
+      this.root.unmount();
+      this.root = null;
+    }
+    const iframe = document.getElementById('iframe-frame') as HTMLIFrameElement;
     if (iframe) {
-      iframe.remove();
+      const doc = iframe.contentDocument || iframe.contentWindow?.document;
+      if (doc && doc.body) {
+        doc.body.innerHTML = '';
+      }
     }
   }
 }
