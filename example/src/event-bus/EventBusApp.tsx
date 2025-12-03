@@ -39,7 +39,6 @@ export async function openEventBusApproveModal() {
   });
 
   unmountApprovalModal();
-  console.log(response.payload);
   return response.payload;
 }
 

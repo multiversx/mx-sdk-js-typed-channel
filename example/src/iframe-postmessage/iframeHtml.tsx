@@ -2,7 +2,7 @@ import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { createApproveTemplate } from '../common/createApproveTemplate';
 
-const IframeApproveModalPage = () => (
+const IframeApproveModal = () => (
   <html lang='en'>
     <head>
       <meta charSet='UTF-8' />
@@ -20,5 +20,5 @@ const IframeApproveModalPage = () => (
 );
 
 export const IFRAME_HTML = `<!DOCTYPE html>${renderToStaticMarkup(
-  <IframeApproveModalPage />
+  <IframeApproveModal />
 )}`;

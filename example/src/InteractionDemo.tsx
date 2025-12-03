@@ -3,7 +3,7 @@ import { openEventBusApproveModal } from './event-bus/EventBusApp';
 import { openBroadcastChannelApproveModal } from './broadcast-channel/BroadcastChannelDemo';
 import { IFRAME_HTML } from './iframe-postmessage/iframeHtml';
 
-export function WebsiteDemo() {
+export function InteractionDemo() {
   const [lastResponse, setLastResponse] = useState<string | null>(null);
   const [showIframe, setShowIframe] = useState(false);
 
@@ -53,7 +53,7 @@ export function WebsiteDemo() {
     <div className='demo-page'>
       <div className='demo-card'>
         <header className='demo-header'>
-          <h1 className='demo-title'>Website Demo</h1>
+          <h1 className='demo-title'>Interaction Demo</h1>
         </header>
 
         <div className='demo-actions'>
