@@ -1,46 +1,81 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top, #e5e7eb, #cbd5f5 40%, #a5b4fc 80%);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.demo-page {
+  width: 100%;
+  padding: 2.5rem 1.5rem;
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.demo-card {
+  margin: 0 auto;
+  max-width: 960px;
+  border-radius: 32px;
+  padding: 3rem 3rem 4rem;
+  background: radial-gradient(circle at top left, #f9fafb, #e5e7eb 40%, #d1d5db);
+  box-shadow:
+    0 40px 80px rgba(15, 23, 42, 0.35),
+    0 0 0 1px rgba(148, 163, 184, 0.35);
 }
 
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.demo-header {
+  margin-bottom: 2rem;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.demo-title {
+  margin: 0;
+  font-size: 2.25rem;
+  letter-spacing: 0.03em;
+  color: #0f172a;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.demo-actions {
+  display: inline-flex;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.04);
 }
 
-.card {
-  padding: 2em;
+.demo-action-button {
+  min-width: 170px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(145deg, #2563eb, #1d4ed8);
+  color: #e5edff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.35);
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease,
+    filter 150ms ease;
 }
 
-.read-the-docs {
-  color: #888;
+.demo-action-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 45px rgba(37, 99, 235, 0.45);
+  filter: brightness(1.05);
+}
+
+.demo-action-button:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.5);
+}
+
+.demo-last-response {
+  margin-top: 2rem;
+  font-size: 0.95rem;
+  color: #4b5563;
 }
 
 .modal-overlay {
@@ -76,6 +111,12 @@
   opacity: 0.75;
 }
 
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
 .modal-transactions {
   display: flex;
   flex-direction: column;
@@ -92,12 +133,11 @@
 }
 
 .modal-button {
-  margin-top: 1rem;
   padding: 0.75rem 1.5rem;
   border-radius: 9999px;
   border: none;
-  background: linear-gradient(120deg, #22d3ee, #38bdf8);
-  color: #0f172a;
+  background: #1f2937;
+  color: #e5e7eb;
   font-weight: 600;
   cursor: pointer;
   transition: transform 150ms ease, opacity 150ms ease;
@@ -110,6 +150,94 @@
 .modal-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.modal-button-approve {
+  background-color: #16a34a;
+  color: #ecfdf3;
+}
+
+.modal-button-approve:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+.modal-button-reject {
+  background-color: #dc2626;
+  color: #fef2f2;
+}
+
+.modal-button-reject:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+.iframe-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  z-index: 900;
+  pointer-events: none;
+}
+
+.iframe-stack {
+  position: relative;
+  width: min(960px, 90vw);
+  max-height: 80vh;
+  pointer-events: auto;
+}
+
+.iframe-stack::before,
+.iframe-stack::after {
+  content: '';
+  position: absolute;
+  inset: 16px;
+  border-radius: 32px;
+  background: rgba(15, 23, 42, 0.1);
+  box-shadow: 0 30px 60px rgba(15, 23, 42, 0.35);
+}
+
+.iframe-stack::before {
+  transform: translate(18px, 22px);
+  opacity: 0.7;
+}
+
+.iframe-stack::after {
+  transform: translate(-18px, -18px);
+  opacity: 0.5;
+}
+
+.iframe-window {
+  position: relative;
+  border-radius: 32px;
+  background: #0b1120;
+  padding: 1.5rem 1.5rem 1.75rem;
+  box-shadow: 0 40px 80px rgba(15, 23, 42, 0.8);
+  overflow: hidden;
+}
+
+.iframe-close-button {
+  position: absolute;
+  top: 1.1rem;
+  right: 1.25rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(15, 23, 42, 0.85);
+  color: #e5e7eb;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.iframe-frame {
+  width: 100%;
+  height: 380px;
+  border-radius: 24px;
+  border: none;
+  background: #020617;
 }
 
 

@@ -23,7 +23,7 @@ function unmountApprovalModal(): void {
   eventBusPromise = null;
 }
 
-async function openApproveModal() {
+export async function openEventBusApproveModal() {
   const eventBus = await mountApprovalModal();
 
   const manager = new TypedChannel<ApproveProtocol>(
@@ -34,12 +34,13 @@ async function openApproveModal() {
 
   const response = await manager.sendMessage({
     type: ApproveEventsEnum.LOGIN_REQUEST,
-    payload: 'TEST',
+    payload: 'Sample text',
     validate: (data) => boolean().isValid(data)
   });
 
   unmountApprovalModal();
   console.log(response.payload);
+  return response.payload;
 }
 
 export function EventBusApp() {
@@ -49,7 +50,11 @@ export function EventBusApp() {
       <p className='read-the-docs'>
         Click the button below to open the approve modal.
       </p>
-      <button className='modal-button' type='button' onClick={openApproveModal}>
+      <button
+        className='modal-button'
+        type='button'
+        onClick={openEventBusApproveModal}
+      >
         Open Approve Modal
       </button>
     </div>
