@@ -43,8 +43,6 @@ export class IframeManager {
     this.root = createRoot(rootElement);
     this.root.render(<IframeModal />);
     const targetWindow = iframe.contentWindow;
-    // Store iframe element for reliable source checking
-    const iframeElement = iframe;
 
     function publish<T>(type: string, payload: T) {
       targetWindow?.postMessage({ type, payload }, '*');
@@ -59,11 +57,6 @@ export class IframeManager {
         if (event.origin !== window.location.origin) {
           return;
         }
-
-        console.log('IframeManager: Processing message', {
-          type,
-          payload: data.payload
-        });
 
         callback(data.payload);
       };
