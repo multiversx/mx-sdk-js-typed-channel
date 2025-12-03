@@ -1,8 +1,8 @@
 import React from 'react';
 import { boolean } from 'yup';
+import { TypedChannel } from '@multiversx/typed-channel';
 import { UiManager } from './UiManager';
 import type { IEventBus } from './EventBus';
-import { TypedChannel } from '../../../src/TypedChannel';
 import {
   ApproveProtocol,
   ApproveEventsEnum,
