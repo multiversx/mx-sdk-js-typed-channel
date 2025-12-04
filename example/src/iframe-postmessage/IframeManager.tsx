@@ -45,13 +45,17 @@ export class IframeManager {
     const targetWindow = iframe.contentWindow;
 
     function publish<T>(type: string, payload: T) {
+      // sending ACTION_REQUEST to the iframe
       targetWindow?.postMessage({ type, payload }, '*');
     }
 
     function subscribe(type: string, callback: (payload: any) => void) {
       const handler = (event: MessageEvent) => {
         const data = event.data;
-        if (!data || data.type !== type) return;
+
+        if (!data || data.type !== type) {
+          return;
+        }
 
         // Check if message came from same origin (our iframe)
         if (event.origin !== window.location.origin) {
@@ -61,6 +65,7 @@ export class IframeManager {
         callback(data.payload);
       };
 
+      // listening for ACTION_RESPONSE from the iframe
       window.addEventListener('message', handler);
 
       return () => {

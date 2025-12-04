@@ -9,7 +9,6 @@ export const IframeModal = () => {
       type: ApproveEventsEnum.LOGIN_RESPONSE,
       payload: true
     };
-    console.log('IframeModal: Sending approve message', message);
     window.parent.postMessage(message, '*');
   };
 
@@ -23,7 +22,7 @@ export const IframeModal = () => {
   };
 
   useEffect(() => {
-    window.parent.postMessage({ type: 'IFRAME_READY' }, '*');
+    window.parent.postMessage({ type: 'HANDSHAKE_RESPONSE' }, '*');
 
     const loginHandler = (event: MessageEvent) => {
       const data = event.data;

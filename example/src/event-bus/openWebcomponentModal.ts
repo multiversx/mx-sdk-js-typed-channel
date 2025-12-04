@@ -8,22 +8,8 @@ import {
   requestResponseMap
 } from '../common/approveModal.types';
 
-let eventBusPromise: Promise<IEventBus> | null = null;
-
-async function mountApprovalModal(): Promise<IEventBus> {
-  if (!eventBusPromise) {
-    eventBusPromise = UiManager.getInstance().mount();
-  }
-  return eventBusPromise;
-}
-
-function unmountApprovalModal(): void {
-  UiManager.getInstance().unmount();
-  eventBusPromise = null;
-}
-
 export async function openEventBusApproveModal() {
-  const eventBus = await mountApprovalModal();
+  const eventBus = await UiManager.getInstance().mount();
 
   const manager = new TypedChannel<ApproveProtocol>(
     (type, data) => eventBus.publish(type, data),
@@ -37,6 +23,6 @@ export async function openEventBusApproveModal() {
     validate: (data) => boolean().isValid(data)
   });
 
-  unmountApprovalModal();
+  UiManager.getInstance().unmount();
   return response.payload;
 }
