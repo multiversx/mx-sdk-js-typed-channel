@@ -1,11 +1,11 @@
 import { boolean } from 'yup';
+import { TypedChannel } from '@multiversx/typed-channel';
 import {
   ApproveEventsEnum,
   ApproveProtocol,
   requestResponseMap
 } from '../common/approveModal.types';
 import { IframeManager } from './IframeManager';
-import { TypedChannel } from '@multiversx/typed-channel';
 
 function mountIframe() {
   return IframeManager.getInstance().mount();
