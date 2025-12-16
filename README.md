@@ -95,6 +95,182 @@ const response = await channel.sendMessage({
 If `type` or `payload` don't match your protocol, TypeScript will error at
 compile time.
 
+## Cross‑tab `TypedChannel` over `window.postMessage`
+
+This shows the **simplest possible** setup to use `TypedChannel` between:
+- a **parent tab** (the one that calls `window.open`)
+- a **child tab** (the one that gets opened)
+
+All transport is done with `window.postMessage`; `TypedChannel` only cares about:
+- how to **send** a message
+- how to **subscribe** to messages
+
+---
+
+## 1. Define a tiny protocol
+
+Put this somewhere shared (or duplicate it in both tabs for the demo):
+
+```ts
+// protocol.ts
+export enum CrossTabEvents {
+  LOGIN_REQUEST = 'LOGIN_REQUEST',
+  LOGIN_RESPONSE = 'LOGIN_RESPONSE',
+}
+
+export type CrossTabProtocol = {
+  [CrossTabEvents.LOGIN_REQUEST]: {
+    request: { subtitle: string };
+    response: boolean;
+  };
+};
+
+export const requestResponseMap = {
+  [CrossTabEvents.LOGIN_REQUEST]: CrossTabEvents.LOGIN_RESPONSE,
+} as const;
+```
+
+---
+
+## 2. Parent tab: open child and create `TypedChannel`
+
+```ts
+// parent.ts
+import { TypedChannel } from '@multiversx/typed-channel';
+import {
+  CrossTabEvents,
+  CrossTabProtocol,
+  requestResponseMap,
+} from './protocol';
+
+const CHILD_URL = 'https://your-app.example.com/child';
+const CHILD_ORIGIN = new URL(CHILD_URL).origin;
+
+let childWindow: Window | null = null;
+
+export function openChildTab() {
+  childWindow = window.open(CHILD_URL, '_blank') ?? null;
+}
+
+function publish(type: string, payload: unknown) {
+  if (!childWindow || childWindow.closed) return;
+  childWindow.postMessage({ type, payload }, CHILD_ORIGIN);
+}
+
+function subscribe(
+  type: string,
+  callback: (payload: unknown) => void,
+): () => void {
+  const handler = (event: MessageEvent) => {
+    if (event.origin !== CHILD_ORIGIN) return;
+    if (childWindow && event.source !== childWindow) return;
+
+    const data = event.data;
+    if (!data || typeof data !== 'object') return;
+    if (data.type !== type) return;
+
+    callback(data.payload);
+  };
+
+  window.addEventListener('message', handler);
+  return () => window.removeEventListener('message', handler);
+}
+
+const channel = new TypedChannel<CrossTabProtocol>(
+  publish,
+  subscribe,
+  requestResponseMap,
+);
+
+export async function askChildForLogin(): Promise<boolean> {
+  const response = await channel.sendMessage({
+    type: CrossTabEvents.LOGIN_REQUEST,
+    payload: { subtitle: 'Please approve login in child tab' },
+  });
+
+  return response.payload;
+}
+```
+
+Usage in the parent:
+
+```ts
+openChildTab();
+const ok = await askChildForLogin();
+console.log('Child answered:', ok);
+```
+
+---
+
+## 3. Child tab: create a matching `TypedChannel`
+
+```ts
+// child.ts
+import { TypedChannel } from '@multiversx/typed-channel';
+import {
+  CrossTabEvents,
+  CrossTabProtocol,
+  requestResponseMap,
+} from './protocol';
+
+const PARENT_ORIGIN = 'https://your-app.example.com'; // expected opener origin
+
+function publish(type: string, payload: unknown) {
+  if (!window.opener) return;
+  window.opener.postMessage({ type, payload }, PARENT_ORIGIN);
+}
+
+function subscribe(
+  type: string,
+  callback: (payload: unknown) => void,
+): () => void {
+  const handler = (event: MessageEvent) => {
+    if (event.origin !== PARENT_ORIGIN) return;
+    if (window.opener && event.source !== window.opener) return;
+
+    const data = event.data;
+    if (!data || typeof data !== 'object') return;
+    if (data.type !== type) return;
+
+    callback(data.payload);
+  };
+
+  window.addEventListener('message', handler);
+  return () => window.removeEventListener('message', handler);
+}
+
+const channel = new TypedChannel<CrossTabProtocol>(
+  publish,
+  subscribe,
+  requestResponseMap,
+);
+```
+
+Now you just answer requests. For the simplest case, approve everything:
+
+```ts
+// somewhere in child startup
+channel.onRequest(CrossTabEvents.LOGIN_REQUEST, async (req) => {
+  console.log('Child received request with subtitle:', req.payload.subtitle);
+  // here you could show UI and wait for user click
+  return true; // or false
+});
+```
+
+---
+
+## 4. Key points
+
+- **TypedChannel does not care** that this is cross‑tab; it only needs:
+  - a `publish(type, payload)` that uses `postMessage`
+  - a `subscribe(type, callback)` that listens on `window.message`
+- Always validate:
+  - **`event.origin`** (must match expected origin)
+  - optionally **`event.source`** (must be the expected window)
+- Once the transport functions are wired, using `TypedChannel` is just:
+  - `channel.sendMessage({ type, payload })` in the parent
+  - `channel.onRequest(type, handler)` in the child.
+
 ## Example app
 
 This repo includes a small example React app that wires `TypedChannel` to an
