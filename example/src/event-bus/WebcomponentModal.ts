@@ -1,0 +1,86 @@
+import { EventBus, type IEventBus } from './EventBus';
+import { ApproveEventsEnum } from '../common/approveModal.types';
+
+const createApproveTemplate = (data: string) => {
+  return `
+      <div class="modal-overlay" role="dialog" aria-modal="true">
+        <div class="modal">
+          <h2 class="modal-title">Approve Modal</h2>
+          <p class="modal-subtitle">${data}</p>
+          <div class="modal-actions">
+            <button class="modal-button modal-button-approve" type="button" id="webcomponent-modal-approve">
+              Approve
+            </button>
+            <button class="modal-button modal-button-reject" type="button" id="webcomponent-modal-reject">
+              Reject
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+};
+export class WebcomponentModal extends HTMLElement {
+  private readonly eventBus: IEventBus = new EventBus();
+  private data: string | null = null;
+  private unsubscribeFromLogin: (() => void) | null = null;
+
+  connectedCallback() {
+    this.unsubscribeFromLogin = this.eventBus.subscribe(
+      ApproveEventsEnum.LOGIN_REQUEST,
+      (data) => {
+        this.data = typeof data === 'string' ? data : null;
+        this.render();
+      }
+    );
+
+    this.render();
+  }
+
+  disconnectedCallback() {
+    this.unsubscribeFromLogin?.();
+    this.unsubscribeFromLogin = null;
+  }
+
+  async getEventBus(): Promise<IEventBus> {
+    return this.eventBus;
+  }
+
+  private render() {
+    if (!this.data) {
+      this.innerHTML = '';
+      return;
+    }
+
+    this.innerHTML = createApproveTemplate(this.data);
+    this.bindButtons();
+  }
+
+  private bindButtons() {
+    const approveButton = this.querySelector<HTMLButtonElement>(
+      '#webcomponent-modal-approve'
+    );
+    const rejectButton = this.querySelector<HTMLButtonElement>(
+      '#webcomponent-modal-reject'
+    );
+
+    if (approveButton) {
+      approveButton.onclick = () => {
+        this.eventBus.publish(ApproveEventsEnum.LOGIN_RESPONSE, true);
+        this.data = null;
+        this.render();
+      };
+    }
+
+    if (rejectButton) {
+      rejectButton.onclick = () => {
+        this.eventBus.publish(ApproveEventsEnum.LOGIN_RESPONSE, false);
+        this.data = null;
+        this.render();
+      };
+    }
+  }
+}
+
+if (!customElements.get('webcomponent-modal')) {
+  customElements.define('webcomponent-modal', WebcomponentModal);
+}

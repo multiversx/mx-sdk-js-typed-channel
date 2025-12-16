@@ -1,5 +1,5 @@
-import type { IEventBus } from "./EventBus";
-import "./ApproveModal/ApproveModal";
+import type { IEventBus } from './EventBus';
+import './WebcomponentModal';
 
 export class UiManager {
   private static _instance: UiManager | null = null;
@@ -13,7 +13,7 @@ export class UiManager {
 
   async mount(): Promise<IEventBus> {
     const approveModal = document.createElement(
-      "approve-modal-web"
+      'webcomponent-modal'
     ) as HTMLElement & { getEventBus: () => Promise<IEventBus> };
 
     document.body.appendChild(approveModal);
@@ -21,7 +21,7 @@ export class UiManager {
   }
 
   unmount(): void {
-    const approveModal = document.querySelector("approve-modal-web");
+    const approveModal = document.querySelector('webcomponent-modal');
     if (approveModal) {
       approveModal.remove();
     }

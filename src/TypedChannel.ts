@@ -2,8 +2,8 @@ import type {
   Protocol,
   RequestPayloadMapOf,
   RequestTypeMapOf,
-  ResponsePayloadMapOf,
-} from "./protocol";
+  ResponsePayloadMapOf
+} from './protocol';
 
 export class TypedChannel<P extends Protocol> {
   private activeListeners: Map<string, () => void> = new Map();
@@ -68,7 +68,7 @@ export class TypedChannel<P extends Protocol> {
 
         resolve({
           type: action,
-          payload,
+          payload
         });
       });
 

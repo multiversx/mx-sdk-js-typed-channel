@@ -1,7 +1,6 @@
-import type { EndpointDef, RequestTypeMapOf } from '../../../../src/protocol';
+import type { EndpointDef, RequestTypeMapOf } from '../../../src/protocol';
 
 // ---- Type-level protocol using EndpointDef ----
-
 export enum ApproveEventsEnum {
   LOGIN_REQUEST = 'LOGIN_REQUEST',
   LOGIN_RESPONSE = 'LOGIN_RESPONSE'
